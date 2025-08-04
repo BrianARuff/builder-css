@@ -2,10 +2,7 @@ import * as ReactClient from "@vitejs/plugin-rsc/browser";
 import React from "react";
 import * as ReactDOMClient from "react-dom/client";
 import { rscStream } from "rsc-html-stream/client";
-import { initializeZeroCss } from "zero-css";
 import type { RscPayload } from "./entry.rsc";
-
-initializeZeroCss();
 
 async function main() {
   // stash `setPayload` function to trigger re-rendering

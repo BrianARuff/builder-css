@@ -22,102 +22,68 @@ npm install zero-css
 ### Object Notation (Recommended)
 
 ```typescript
-import { css } from 'zero-css'
+import { css } from "zero-css";
 
 const buttonStyles = css({
-  backgroundColor: 'blue',
-  padding: '12px 24px',
-  borderRadius: '4px',
-  ':hover': {
-    backgroundColor: 'darkblue'
+  backgroundColor: "blue",
+  padding: "12px 24px",
+  borderRadius: "4px",
+  ":hover": {
+    backgroundColor: "darkblue",
   },
-  '@media (max-width: 768px)': {
-    padding: '8px 16px'
-  }
-})
+  "@media (max-width: 768px)": {
+    padding: "8px 16px",
+  },
+});
 
 // Use the generated class name
-document.getElementById('button').className = buttonStyles
+document.getElementById("button").className = buttonStyles;
 ```
 
 ### Template Literals
 
 ```typescript
-import { css } from 'zero-css'
+import { css } from "zero-css";
 
 const cardStyles = css`
   background: white;
   border: 1px solid #ccc;
   border-radius: 8px;
   padding: 16px;
-`
+`;
 ```
 
 ## Build Setup
 
-### Vite
-
-```typescript
-// vite.config.ts
-import { defineConfig } from 'vite'
-import { zeroCSSPlugin } from 'zero-css/plugins/vite'
-
-export default defineConfig({
-  plugins: [
-    zeroCSSPlugin({
-      outputFile: 'styles.css',
-      minify: true
-    })
-  ]
-})
-```
-
-### Webpack
-
-```typescript
-// webpack.config.js
-import { ZeroCSSWebpackPlugin } from 'zero-css/plugins/webpack'
-
-export default {
-  plugins: [
-    new ZeroCSSWebpackPlugin({
-      outputFile: 'styles.css',
-      minify: true
-    })
-  ]
-}
-```
-
-## Advanced Usage
-
 ### Initialization with Custom Options
 
 ```typescript
-import { initializeZeroCss } from 'zero-css'
+import { initializeZeroCss } from "zero-css";
 
+// optional - will run w/o initialization
 initializeZeroCss({
-  mode: 'development',
+  mode: "development",
   enableDebugger: true,
-  target: document.getElementById('style-container')
-})
+  target: document.getElementById("style-container"),
+});
 ```
 
 ### SSR Support
 
 ```typescript
-import { getSSRStyles, clearSSRStyles } from 'zero-css'
+import { getSSRStyles, clearSSRStyles } from "zero-css";
 
 // On the server
-const cssString = getSSRStyles()
+const cssString = getSSRStyles();
 
 // Include in your HTML
 const html = `
   <style>${cssString}</style>
   <div class="${buttonStyles}">Button</div>
-`
+`;
 
 // Clean up after rendering
-clearSSRStyles()
+clearSSRStyles();
 ```
 
 ## API Reference
@@ -127,7 +93,7 @@ clearSSRStyles()
 - `css(styles)` - Main function for creating styles
 - `styled(styles)` - Alias for css with semantic naming
 - `applyStyles(cssText)` - Apply raw CSS text
-- `initializeZeroCss(options)` - Initialize with custom options
+- `initializeZeroCss(options)` - Initialize with custom options (optional)
 
 ### Development Utilities
 
@@ -145,16 +111,16 @@ clearSSRStyles()
 Zero CSS provides full TypeScript support with autocomplete for all CSS properties:
 
 ```typescript
-import type { ZeroCSSProperties } from 'zero-css'
+import type { ZeroCSSProperties } from "zero-css";
 
-const styles: ZeroCSSProperties = {
-  display: 'flex', // ✅ Autocomplete
-  alignItems: 'center', // ✅ Autocomplete
-  gap: '1rem',
-  ':hover': {
-    opacity: 0.8 // ✅ Nested autocomplete
-  }
-}
+const containerClassName: = css({
+  display: "flex", // ✅ Autocomplete
+  alignItems: "center", // ✅ Autocomplete
+  gap: "1rem", // ✅ Autocomplete
+  ":hover": { // ✅ Also supports psuedo selectors (both classes and elements)
+    opacity: 0.8, // ✅ Nested autocomplete
+  },
+});
 ```
 
 ## License
