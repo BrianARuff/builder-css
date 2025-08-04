@@ -1,5 +1,5 @@
 import { UniversalStyleManager } from "./style-manager";
-import type { ZeroCSSOptions, ZeroCSSProperties } from "./types";
+import type { BuilderCSSOptions, BuilderCSSProperties } from "./types";
 import {
   generateClassName,
   generateCompleteCSS,
@@ -9,7 +9,7 @@ import {
 
 let globalStyleManager: UniversalStyleManager | null = null;
 
-export function initializeZeroCss(options: ZeroCSSOptions = {}) {
+export function initializeBuilderCss(options: BuilderCSSOptions = {}) {
   const isDev =
     typeof process !== "undefined" && process.env?.NODE_ENV === "development";
   globalStyleManager = new UniversalStyleManager({
@@ -20,7 +20,7 @@ export function initializeZeroCss(options: ZeroCSSOptions = {}) {
 
   // Store global reference for legacy compatibility
   if (typeof window !== "undefined") {
-    window.__ZERO_CSS_STYLE_SHEET__ = options.target as any;
+    window.__BUILDER_CSS_STYLE_SHEET__ = options.target as any;
 
     // Enable HMR style clearing in development
     if (isDev && (globalThis as any).import?.meta?.hot) {
@@ -30,19 +30,19 @@ export function initializeZeroCss(options: ZeroCSSOptions = {}) {
     }
 
     // Add global console methods for easy CSS inspection
-    (window as any).__zeroCssViewStyles = () => {
+    (window as any).__builderCssViewStyles = () => {
       const css = globalStyleManager?.getAllInjectedCSS() || "No styles found";
       console.log(
-        "%c[Zero-CSS] Generated CSS:",
+        "%c[Builder CSS] Generated CSS:",
         "color: #0066cc; font-weight: bold;"
       );
       console.log(css);
       return css;
     };
-    (window as any).__zeroCssViewStylesTable = () => {
+    (window as any).__builderCssViewStylesTable = () => {
       const styles = globalStyleManager?.getAllStyles();
       if (!styles || styles.size === 0) {
-        console.log("%c[Zero-CSS] No styles found", "color: #ff6600;");
+        console.log("%c[Builder CSS] No styles found", "color: #ff6600;");
         return;
       }
 
@@ -56,29 +56,29 @@ export function initializeZeroCss(options: ZeroCSSOptions = {}) {
       }));
 
       console.log(
-        "%c[Zero-CSS] Styles Table:",
+        "%c[Builder CSS] Styles Table:",
         "color: #0066cc; font-weight: bold;"
       );
       console.table(tableData);
       return tableData;
     };
-    (window as any).__zeroCssHelp = () => {
+    (window as any).__builderCssHelp = () => {
       console.log(
-        "%c[Zero-CSS] Console Commands:",
+        "%c[Builder CSS] Console Commands:",
         "color: #0066cc; font-weight: bold; font-size: 14px;"
       );
       console.log(
-        "%c__zeroCssViewStyles()",
+        "%c__builderCssViewStyles()",
         "color: #009900; font-weight: bold;",
         "- View all generated CSS"
       );
       console.log(
-        "%c__zeroCssViewStylesTable()",
+        "%c__builderCssViewStylesTable()",
         "color: #009900; font-weight: bold;",
         "- View styles in a table format"
       );
       console.log(
-        "%c__zeroCssHelp()",
+        "%c__builderCssHelp()",
         "color: #009900; font-weight: bold;",
         "- Show this help"
       );
@@ -88,7 +88,7 @@ export function initializeZeroCss(options: ZeroCSSOptions = {}) {
     if (isDev) {
       setTimeout(() => {
         console.log(
-          "%c[Zero-CSS] Ready! Type __zeroCssHelp() in console to see available commands.",
+          "%c[Builder CSS] Ready! Type __builderCssHelp() in console to see available commands.",
           "color: #0066cc;"
         );
       }, 1000);
@@ -100,16 +100,16 @@ export function initializeZeroCss(options: ZeroCSSOptions = {}) {
 
 function getStyleManager(): UniversalStyleManager {
   if (!globalStyleManager) {
-    globalStyleManager = initializeZeroCss();
+    globalStyleManager = initializeBuilderCss();
   }
   return globalStyleManager;
 }
 
 // Main CSS function with dual API support
-export function css(styles: ZeroCSSProperties): string;
+export function css(styles: BuilderCSSProperties): string;
 export function css(strings: TemplateStringsArray, ...values: any[]): string;
 export function css(
-  stylesOrStrings: ZeroCSSProperties | TemplateStringsArray,
+  stylesOrStrings: BuilderCSSProperties | TemplateStringsArray,
   ...values: any[]
 ): string {
   let cssText: string;
@@ -127,7 +127,7 @@ export function css(
     cssText = `.${className} { ${templateCSS} }`;
   } else {
     // Object path with full TypeScript support
-    const styleObject = stylesOrStrings as ZeroCSSProperties;
+    const styleObject = stylesOrStrings as BuilderCSSProperties;
     const objectStr = JSON.stringify(styleObject);
     styleId = hash(objectStr);
     className = generateClassName(objectStr);
@@ -144,7 +144,7 @@ export function css(
   // In build-time mode, return the style ID for extraction
   if (
     typeof process !== "undefined" &&
-    process.env?.ZERO_CSS_BUILD_TIME === "true"
+    process.env?.BUILDER_CSS_BUILD_TIME === "true"
   ) {
     return styleId;
   }
@@ -165,7 +165,7 @@ export function applyStyles(cssText: string, metadata?: any): string {
 }
 
 // Utility function to create styles with explicit class names
-export function styled(cssStyles: ZeroCSSProperties): string {
+export function styled(cssStyles: BuilderCSSProperties): string {
   return css(cssStyles);
 }
 
@@ -175,7 +175,7 @@ export function getDebugInfo(styleId?: string) {
     typeof process !== "undefined" &&
     process.env?.NODE_ENV !== "development"
   ) {
-    console.warn("[zero-css] Debug info only available in development mode");
+    console.warn("[builder-css] Debug info only available in development mode");
     return null;
   }
 
@@ -201,7 +201,7 @@ export function clearSSRStyles() {
   UniversalStyleManager.clearSSRStyles();
 }
 
-// Transform stream to inject Zero-CSS styles into HTML head for streaming SSR
+// Transform stream to inject Builder CSS styles into HTML head for streaming SSR
 export function injectSSRPayload(
   cssText: string,
   options: { nonce?: string } = {}
@@ -225,8 +225,8 @@ export function injectSSRPayload(
         const afterHead = text.slice(headCloseIndex);
 
         const styleTag = options.nonce
-          ? `<style data-zero-css="true" nonce="${options.nonce}">${cssText}</style>`
-          : `<style data-zero-css="true">${cssText}</style>`;
+          ? `<style data-builder-css="true" nonce="${options.nonce}">${cssText}</style>`
+          : `<style data-builder-css="true">${cssText}</style>`;
 
         const modifiedText = beforeHead + styleTag + afterHead;
         controller.enqueue(encoder.encode(modifiedText));

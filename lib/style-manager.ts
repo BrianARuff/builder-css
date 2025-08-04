@@ -1,4 +1,4 @@
-import type { CompiledStyle, ZeroCSSOptions, StyleDebugInfo } from './types'
+import type { CompiledStyle, BuilderCSSOptions, StyleDebugInfo } from './types'
 import { computeChecksum, isServer, isBrowser, supportsCSSStyleSheet } from './utils'
 
 export class UniversalStyleManager {
@@ -8,7 +8,7 @@ export class UniversalStyleManager {
   private styleSheet: CSSStyleSheet | null = null
   private styleElement: HTMLStyleElement | null = null
 
-  constructor(private options: ZeroCSSOptions = {}) {
+  constructor(private options: BuilderCSSOptions = {}) {
     if (isBrowser()) {
       this.initializeBrowserTarget()
     }
@@ -31,7 +31,7 @@ export class UniversalStyleManager {
 
   private createStyleElement(parent?: HTMLElement): HTMLStyleElement {
     const styleElement = document.createElement('style')
-    styleElement.setAttribute('data-zero-css', 'true')
+    styleElement.setAttribute('data-builder-css', 'true')
     ;(parent || document.head).appendChild(styleElement)
     return styleElement
   }
@@ -85,12 +85,12 @@ export class UniversalStyleManager {
       } else {
         // Last resort: create new style element
         const styleElement = document.createElement('style')
-        styleElement.setAttribute('data-zero-css-id', id)
+        styleElement.setAttribute('data-builder-css-id', id)
         styleElement.textContent = cssText
         document.head.appendChild(styleElement)
       }
     } catch (error) {
-      console.warn(`[zero-css] Failed to inject style ${id}:`, error)
+      console.warn(`[builder-css] Failed to inject style ${id}:`, error)
     }
   }
 
@@ -126,8 +126,8 @@ export class UniversalStyleManager {
 
   private collectForSSR(id: string, cssText: string) {
     if (typeof globalThis !== 'undefined') {
-      ;(globalThis as any).__ZERO_CSS_STYLES__ = (globalThis as any).__ZERO_CSS_STYLES__ || new Map()
-      ;(globalThis as any).__ZERO_CSS_STYLES__.set(id, cssText)
+      ;(globalThis as any).__BUILDER_CSS_STYLES__ = (globalThis as any).__BUILDER_CSS_STYLES__ || new Map()
+      ;(globalThis as any).__BUILDER_CSS_STYLES__.set(id, cssText)
     }
   }
 
@@ -184,11 +184,11 @@ export class UniversalStyleManager {
 
   // Static method for SSR
   static getSSRStyles(): string {
-    if (typeof globalThis === 'undefined' || !(globalThis as any).__ZERO_CSS_STYLES__) {
+    if (typeof globalThis === 'undefined' || !(globalThis as any).__BUILDER_CSS_STYLES__) {
       return ''
     }
 
-    const styles = Array.from((globalThis as any).__ZERO_CSS_STYLES__.entries()) as [string, string][]
+    const styles = Array.from((globalThis as any).__BUILDER_CSS_STYLES__.entries()) as [string, string][]
     return styles
       .map(([, cssText]) => cssText) // cssText is already complete CSS rules
       .join('\n')
@@ -196,7 +196,7 @@ export class UniversalStyleManager {
 
   static clearSSRStyles() {
     if (typeof globalThis !== 'undefined') {
-      ;(globalThis as any).__ZERO_CSS_STYLES__?.clear()
+      ;(globalThis as any).__BUILDER_CSS_STYLES__?.clear()
     }
   }
 }

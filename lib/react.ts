@@ -5,7 +5,7 @@ export const css = baseCss
 export const styled = baseStyled
 
 // React component helper for SSR
-export function ZeroCSSProvider({ children }: { children: any }) {
+export function BuilderCSSProvider({ children }: { children: any }) {
   // This would be implemented to inject SSR styles
   // For now, it's a placeholder that returns children as-is
   return children

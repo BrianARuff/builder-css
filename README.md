@@ -1,4 +1,4 @@
-# Zero CSS
+# Builder CSS
 
 A TypeScript-first CSS-in-JS library with zero runtime cost and full SSR support.
 
@@ -15,7 +15,7 @@ A TypeScript-first CSS-in-JS library with zero runtime cost and full SSR support
 ## Installation
 
 ```bash
-npm install zero-css
+npm install builder-css
 ```
 
 ## Quick Start
@@ -23,7 +23,7 @@ npm install zero-css
 ### Object Notation (Recommended)
 
 ```typescript
-import { css } from "zero-css";
+import { css } from "builder-css";
 
 const buttonStyles = css({
   backgroundColor: "blue",
@@ -50,7 +50,7 @@ document.getElementById("button").className = buttonStyles;
 ### Template Literals
 
 ```typescript
-import { css } from "zero-css";
+import { css } from "builder-css";
 
 const cardStyles = css`
   background: white;
@@ -67,7 +67,7 @@ const cardStyles = css`
 For simple client-side applications, just import and use:
 
 ```typescript
-import { css } from "zero-css";
+import { css } from "builder-css";
 
 // That's it! No initialization required for basic usage
 const styles = css({ color: "red" });
@@ -80,17 +80,17 @@ Perfect for server-side rendering with React components.
 #### 1. Install and Configure
 
 ```bash
-npm install zero-css
+npm install builder-css
 ```
 
-#### 2. Create Zero CSS Initialization (Optional)
+#### 2. Create Builder CSS Initialization (Optional)
 
 ```typescript
-// src/lib/zero-css-init.ts
-import { initializeZeroCss } from "zero-css";
+// src/lib/builder-css-init.ts
+import { initializeBuilderCss } from "builder-css";
 
-// Optional: customize zero-css behavior
-initializeZeroCss({
+// Optional: customize builder-css behavior
+initializeBuilderCss({
   mode: process.env.NODE_ENV === 'development' ? 'development' : 'production',
   enableDebugger: process.env.NODE_ENV === 'development',
 });
@@ -101,8 +101,8 @@ initializeZeroCss({
 ```typescript
 // src/app/layout.tsx
 import type { Metadata } from "next";
-import { getSSRStyles } from "zero-css";
-import "../lib/zero-css-init"; // Optional initialization
+import { getSSRStyles } from "builder-css";
+import "../lib/builder-css-init"; // Optional initialization
 
 export default function RootLayout({
   children,
@@ -115,10 +115,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Inject Zero CSS styles for SSR */}
+        {/* Inject Builder CSS styles for SSR */}
         {ssrStyles && (
           <style
-            id="zero-css-ssr"
+            id="builder-css-ssr"
             dangerouslySetInnerHTML={{ __html: ssrStyles }}
           />
         )}
@@ -133,7 +133,7 @@ export default function RootLayout({
 
 ```typescript
 // src/components/Button.tsx
-import { css } from "zero-css";
+import { css } from "builder-css";
 
 const buttonStyles = css({
   backgroundColor: "#3498db",
@@ -173,14 +173,14 @@ For streaming SSR with React Server Components.
 #### 1. Install Dependencies
 
 ```bash
-npm install zero-css
+npm install builder-css
 ```
 
 #### 2. Setup SSR Entry Point
 
 ```typescript
 // src/framework/entry.ssr.tsx
-import { getSSRStyles, injectSSRPayload } from "zero-css";
+import { getSSRStyles, injectSSRPayload } from "builder-css";
 import * as ReactDOMServer from "react-dom/server.edge";
 
 export async function renderHTML(
@@ -192,7 +192,7 @@ export async function renderHTML(
   
   let responseStream: ReadableStream<Uint8Array> = htmlStream;
 
-  // Inject Zero-CSS styles into the HTML stream
+  // Inject Builder CSS styles into the HTML stream
   const ssrStyles = getSSRStyles();
   if (ssrStyles) {
     responseStream = responseStream.pipeThrough(
@@ -208,7 +208,7 @@ export async function renderHTML(
 
 ```typescript
 // src/components/Card.tsx
-import { css } from "zero-css";
+import { css } from "builder-css";
 
 const cardStyles = css({
   backgroundColor: "white",
@@ -234,15 +234,15 @@ For fast compilation with SWC instead of Babel.
 #### 1. Install Dependencies
 
 ```bash
-npm install zero-css
+npm install builder-css
 ```
 
 #### 2. Use in Your Components
 
-Zero CSS works seamlessly with SWC compilation:
+Builder CSS works seamlessly with SWC compilation:
 
 ```typescript
-import { css } from "zero-css";
+import { css } from "builder-css";
 
 const appStyles = css({
   fontFamily: "system-ui, sans-serif",
@@ -253,13 +253,13 @@ const appStyles = css({
 });
 
 export function App() {
-  return <div className={appStyles}>Hello Zero CSS with SWC!</div>;
+  return <div className={appStyles}>Hello Builder CSS with SWC!</div>;
 }
 ```
 
 ### Other Frameworks
 
-Zero CSS works with any JavaScript framework. The basic pattern is:
+Builder CSS works with any JavaScript framework. The basic pattern is:
 
 1. **Client-side**: Just import `css` and use it
 2. **SSR**: Use `getSSRStyles()` to collect styles and inject them into your HTML
@@ -272,7 +272,7 @@ Zero CSS works with any JavaScript framework. The basic pattern is:
 - `css(styles)` - Main function for creating styles
 - `styled(styles)` - Alias for css with semantic naming  
 - `applyStyles(cssText)` - Apply raw CSS text
-- `initializeZeroCss(options)` - Initialize with custom options *(optional)*
+- `initializeBuilderCss(options)` - Initialize with custom options *(optional)*
 
 ### Development Utilities
 
@@ -288,14 +288,14 @@ Zero CSS works with any JavaScript framework. The basic pattern is:
 
 ### Initialization Options
 
-The `initializeZeroCss()` function is **optional** but useful for:
+The `initializeBuilderCss()` function is **optional** but useful for:
 
 - **Development debugging**: Enable style inspection tools
 - **Custom targets**: Inject styles into specific DOM elements
 - **CSP compliance**: Configure nonce for Content Security Policy
 
 ```typescript
-initializeZeroCss({
+initializeBuilderCss({
   mode: "development" | "production", // Controls optimizations
   enableDebugger: boolean,           // Adds debugging utilities
   target: HTMLElement,               // Custom style injection target
@@ -304,10 +304,10 @@ initializeZeroCss({
 
 ## TypeScript Support
 
-Zero CSS provides full TypeScript support with autocomplete for all CSS properties:
+Builder CSS provides full TypeScript support with autocomplete for all CSS properties:
 
 ```typescript
-import type { ZeroCSSProperties } from "zero-css";
+import type { BuilderCSSProperties } from "builder-css";
 
 const containerStyles = css({
   display: "flex",        // ✅ Autocomplete

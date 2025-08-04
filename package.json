@@ -1,30 +1,20 @@
 {
-  "name": "zero-css",
+  "name": "builder-css",
   "private": false,
-  "version": "0.1.0",
+  "version": "0.1.0-beta.1",
   "type": "module",
   "files": [
     "dist",
     "index.d.ts"
   ],
-  "main": "./dist/zero-css.cjs",
-  "module": "./dist/zero-css.js",
+  "main": "./dist/builder-css.cjs",
+  "module": "./dist/builder-css.js",
   "types": "./index.d.ts",
   "exports": {
     ".": {
       "types": "./index.d.ts",
-      "import": "./dist/zero-css.js",
-      "require": "./dist/zero-css.cjs"
-    },
-    "./plugins/vite": {
-      "types": "./dist/lib/plugins/vite.d.ts",
-      "import": "./dist/plugins/vite.js",
-      "require": "./dist/plugins/vite.cjs"
-    },
-    "./plugins/webpack": {
-      "types": "./dist/lib/plugins/webpack.d.ts",
-      "import": "./dist/plugins/webpack.js",
-      "require": "./dist/plugins/webpack.cjs"
+      "import": "./dist/builder-css.js",
+      "require": "./dist/builder-css.cjs"
     }
   },
   "scripts": {
@@ -44,5 +34,17 @@
   },
   "dependencies": {
     "csstype": "^3.1.3"
+  },
+  "author": {
+    "name": "Brian Ruff",
+    "email": "brian.ruff@gmx.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BrianARuff/builder-css.git"
+  },
+  "homepage": "https://github.com/BrianARuff/builder-css#readme",
+  "bugs": {
+    "url": "https://github.com/BrianARuff/builder-css/issues"
   }
 }

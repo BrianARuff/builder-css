@@ -1,4 +1,4 @@
-import type { ZeroCSSProperties } from './types'
+import type { BuilderCSSProperties } from './types'
 
 export function kebabCase(str: string): string {
   return str.replace(/([A-Z])/g, '-$1').toLowerCase()
@@ -21,7 +21,7 @@ export function computeChecksum(cssText: string): string {
   return hash(cssText)
 }
 
-export function objectToCSSString(styles: ZeroCSSProperties, selector = ''): string {
+export function objectToCSSString(styles: BuilderCSSProperties, selector = ''): string {
   let css = ''
   const nestedRules: string[] = []
   
@@ -41,7 +41,7 @@ export function objectToCSSString(styles: ZeroCSSProperties, selector = ''): str
         nestedSelector = prop.replace('&', selector)
       }
       
-      const nestedCSS = objectToCSSString(value as ZeroCSSProperties, nestedSelector)
+      const nestedCSS = objectToCSSString(value as BuilderCSSProperties, nestedSelector)
       
       if (prop.startsWith('@media')) {
         nestedRules.push(`${prop} { ${nestedSelector ? `${nestedSelector} { ${nestedCSS} }` : nestedCSS} }`)
@@ -61,7 +61,7 @@ export function objectToCSSString(styles: ZeroCSSProperties, selector = ''): str
 }
 
 // New function to generate complete CSS with class name
-export function generateCompleteCSS(styles: ZeroCSSProperties, className: string): string {
+export function generateCompleteCSS(styles: BuilderCSSProperties, className: string): string {
   // Check if there are nested rules (pseudo-selectors, media queries, etc.)
   const hasNestedRules = Object.keys(styles).some(key => 
     typeof (styles as any)[key] === 'object' && (styles as any)[key] !== null
@@ -94,7 +94,7 @@ export function generateCompleteCSS(styles: ZeroCSSProperties, className: string
           nestedSelector = `.${className} ${prop}`
         }
         
-        const nestedCSS = objectToCSSString(value as ZeroCSSProperties)
+        const nestedCSS = objectToCSSString(value as BuilderCSSProperties)
         
         if (prop.startsWith('@media') || prop.startsWith('@container') || prop.startsWith('@supports')) {
           // Wrap the class selector inside the at-rule

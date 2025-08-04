@@ -1,10 +1,10 @@
+import { css, initializeBuilderCss } from "builder-css";
 import React from "react";
-import { css, initializeZeroCss } from "zero-css";
 
 console.log(React);
 
-// Initialize the zero-css library
-initializeZeroCss();
+// Initialize the builder-css library
+initializeBuilderCss();
 
 function App() {
   // Test basic CSS object syntax
@@ -62,11 +62,11 @@ function App() {
 
   return (
     <div className={containerStyle}>
-      <h1 className={responsiveStyle}>Zero CSS Test App</h1>
+      <h1 className={responsiveStyle}>Builder CSS Test App</h1>
 
       <div className={cardStyle}>
-        <h2>Welcome to Zero CSS!</h2>
-        <p>This is a test of the zero-runtime CSS-in-JS library.</p>
+        <h2>Welcome to Builder CSS!</h2>
+        <p>This is a test of the Builder CSS zero-runtime CSS-in-JS library.</p>
       </div>
 
       <div>
@@ -110,18 +110,18 @@ function App() {
         </ul>
         <h3>Other Demo Apps:</h3>
         <ul>
-          <li>react_app</li>
-          <li>react_app_swc</li>
-          <li>react_app_rsc</li>
+          <li>react_next</li>
+          <li>react_swc</li>
+          <li>react_rsc</li>
         </ul>
         {/* how to run them (cd to app directory and then run npm install then npm run dev) */}
         <p>
           To run these apps, navigate to the app directory and run:
           <code>npm install</code> followed by <code>npm run dev</code>.
         </p>
-        {/* mention special files to view like root.tsx and client.tsx in react_app_swc */}
+        {/* mention special files to view like root.tsx and client.tsx in react_swc */}
         <div>
-          In <code>react_app_swc</code>, pay attention to the special files:
+          In <code>react_rsc</code>, pay attention to the special files:
           <ul>
             <li>
               <code>root.tsx</code> - The main entry point

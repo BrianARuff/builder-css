@@ -13,7 +13,7 @@ export default defineConfig(({ mode }) => {
       },
       resolve: {
         alias: {
-          'zero-css': resolve(__dirname, 'lib/css.ts'), // Import only the CSS functions, not the full main.ts
+          'builder-css': resolve(__dirname, 'lib/css.ts'), // Import only the CSS functions, not the full main.ts
         }
       }
     }
@@ -22,25 +22,20 @@ export default defineConfig(({ mode }) => {
   // Library build mode
   return {
     build: {
-      emptyOutDir: false, // Don't clean dist directory to preserve TypeScript declarations
+      emptyOutDir: true, // Clean dist directory
       lib: {
-        entry: {
-          main: resolve(__dirname, 'lib/main.ts'),
-          'plugins/vite': resolve(__dirname, 'lib/plugins/vite.ts'),
-          'plugins/webpack': resolve(__dirname, 'lib/plugins/webpack.ts'),
-        },
-        name: 'ZeroCSS',
-        fileName: (format, entryName) => {
+        entry: resolve(__dirname, 'lib/main.ts'),
+        name: 'BuilderCSS',
+        formats: ['es', 'cjs'],
+        fileName: (format) => {
           const ext = format === 'cjs' ? 'cjs' : 'js'
-          return entryName === 'main' ? `zero-css.${ext}` : `${entryName}.${ext}`
+          return `builder-css.${ext}`
         },
       },
       rollupOptions: {
-        external: ['vite', 'webpack', 'csstype'],
+        external: ['csstype'],
         output: {
           globals: {
-            'vite': 'Vite',
-            'webpack': 'Webpack',
             'csstype': 'CSSType'
           }
         }
