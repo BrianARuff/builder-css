@@ -42,31 +42,50 @@ async function App() {
   });
 
   return (
-    <div id="root">
-      <div className="card">
-        <ClientCounter />
-        <form action={updateServerCounter.bind(null, 1)}>
-          <ServerCounterButton serverCount={serverCount} />
+    <div
+      className={css({
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: "10px",
+        height: "100vh",
+        justifyContent: "center",
+        backgroundColor: "#f0f0f0",
+        color: "#333",
+        fontFamily: "Arial, sans-serif",
+        fontSize: "16px",
+      })}
+    >
+      <ClientCounter />
+      <form
+        className={css({
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "10px",
+        })}
+        action={updateServerCounter.bind(null, 1)}
+      >
+        <ServerCounterButton serverCount={serverCount} />
 
-          {/* These styles are statically defined in index.css, and like the css function, cannot be dynamically generated. */}
-          <button
-            className={`server-btn ${
-              serverCount % 2 === 0 ? "bgc-blue" : "bgc-green"
-            }`}
-          >
-            Server Counter: {serverCount}
-          </button>
+        {/* These styles are statically defined in index.css, and like the css function, cannot be dynamically generated. */}
+        <button
+          className={`server-btn ${
+            serverCount % 2 === 0 ? "bgc-blue" : "bgc-green"
+          }`}
+        >
+          Server Counter: {serverCount}
+        </button>
 
-          {/* Styles for server generated code can't be dynamically generated like client styles, but you can define them statically and then use them conditionally. */}
-          <button
-            className={`${svbtn2} ${
-              serverCount % 2 === 0 ? rebeccaPurpleCN : powerBlueCN
-            }`}
-          >
-            Server Counter: {serverCount}
-          </button>
-        </form>
-      </div>
+        {/* Styles for server generated code can't be dynamically generated like client styles, but you can define them statically and then use them conditionally. */}
+        <button
+          className={`${svbtn2} ${
+            serverCount % 2 === 0 ? rebeccaPurpleCN : powerBlueCN
+          }`}
+        >
+          Server Counter: {serverCount}
+        </button>
+      </form>
     </div>
   );
 }

@@ -28,26 +28,13 @@ export function ClientCounter() {
     });
 
   return (
-    <div
-      className={css({
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: "10px",
-        height: "100vh",
-        justifyContent: "center",
-        backgroundColor: "#f0f0f0",
-        color: "#333",
-        fontFamily: "Arial, sans-serif",
-        fontSize: "16px",
-      })}
-    >
+    <>
       <button className={btnCN(count)} onClick={() => setCount(count + 1)}>
         Client Counter: {count}
       </button>
       <button className={btnCN(count2)} onClick={() => setCount2(count2 + 1)}>
         Client Counter 2: {count2}
       </button>
-    </div>
+    </>
   );
 }

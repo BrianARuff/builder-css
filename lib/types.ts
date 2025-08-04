@@ -87,6 +87,9 @@ export interface ZeroCSSProperties extends CSSProperties {
   // Supports queries
   [key: `@supports ${string}`]: ZeroCSSProperties | undefined
   
+  // Keyframes animations
+  [key: `@keyframes ${string}`]: Record<string, ZeroCSSProperties> | undefined
+  
   // Nested selectors with &
   [key: `& ${string}`]: ZeroCSSProperties
   [key: `&:${string}`]: ZeroCSSProperties

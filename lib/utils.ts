@@ -33,8 +33,8 @@ export function objectToCSSString(styles: ZeroCSSProperties, selector = ''): str
       if (prop.startsWith(':') || prop.startsWith('::')) {
         // Pseudo-selectors and pseudo-elements
         nestedSelector = `${selector}${prop}`
-      } else if (prop.startsWith('@media')) {
-        // Media queries
+      } else if (prop.startsWith('@media') || prop.startsWith('@keyframes')) {
+        // Media queries and keyframes
         nestedSelector = prop
       } else if (prop.startsWith('&')) {
         // Nested selectors
@@ -45,6 +45,8 @@ export function objectToCSSString(styles: ZeroCSSProperties, selector = ''): str
       
       if (prop.startsWith('@media')) {
         nestedRules.push(`${prop} { ${nestedSelector ? `${nestedSelector} { ${nestedCSS} }` : nestedCSS} }`)
+      } else if (prop.startsWith('@keyframes')) {
+        nestedRules.push(`${prop} { ${nestedCSS} }`)
       } else {
         nestedRules.push(`${nestedSelector} { ${nestedCSS} }`)
       }
@@ -78,8 +80,8 @@ export function generateCompleteCSS(styles: ZeroCSSProperties, className: string
         if (prop.startsWith(':') || prop.startsWith('::')) {
           // Pseudo-selectors and pseudo-elements
           nestedSelector = `.${className}${prop}`
-        } else if (prop.startsWith('@media') || prop.startsWith('@container') || prop.startsWith('@supports')) {
-          // At-rule queries (media, container, supports)
+        } else if (prop.startsWith('@media') || prop.startsWith('@container') || prop.startsWith('@supports') || prop.startsWith('@keyframes')) {
+          // At-rule queries (media, container, supports, keyframes)
           nestedSelector = prop
         } else if (prop.startsWith('&')) {
           // Nested selectors with & (e.g., &:hover, &.active, &#id, &[attr])
@@ -97,6 +99,9 @@ export function generateCompleteCSS(styles: ZeroCSSProperties, className: string
         if (prop.startsWith('@media') || prop.startsWith('@container') || prop.startsWith('@supports')) {
           // Wrap the class selector inside the at-rule
           nestedRules.push(`${prop} { .${className} { ${nestedCSS} } }`)
+        } else if (prop.startsWith('@keyframes')) {
+          // Generate keyframes rule - no class wrapper needed
+          nestedRules.push(`${prop} { ${nestedCSS} }`)
         } else {
           nestedRules.push(`${nestedSelector} { ${nestedCSS} }`)
         }

@@ -3,42 +3,8 @@ import React from "react";
 import type { ReactFormState } from "react-dom/client";
 import * as ReactDOMServer from "react-dom/server.edge";
 import { injectRSCPayload } from "rsc-html-stream/server";
-import { getSSRStyles } from "zero-css";
+import { getSSRStyles, injectSSRPayload } from "zero-css";
 import type { RscPayload } from "./entry.rsc";
-
-// Transform stream to inject Zero-CSS styles into HTML head
-function injectZeroCSSStyles(cssText: string, options: { nonce?: string }) {
-  const decoder = new TextDecoder();
-  const encoder = new TextEncoder();
-  let injected = false;
-
-  return new TransformStream({
-    transform(chunk, controller) {
-      if (injected) {
-        controller.enqueue(chunk);
-        return;
-      }
-
-      const text = decoder.decode(chunk, { stream: true });
-      const headCloseIndex = text.indexOf("</head>");
-
-      if (headCloseIndex !== -1) {
-        const beforeHead = text.slice(0, headCloseIndex);
-        const afterHead = text.slice(headCloseIndex);
-
-        const styleTag = options.nonce
-          ? `<style data-zero-css="true" nonce="${options.nonce}">${cssText}</style>`
-          : `<style data-zero-css="true">${cssText}</style>`;
-
-        const modifiedText = beforeHead + styleTag + afterHead;
-        controller.enqueue(encoder.encode(modifiedText));
-        injected = true;
-      } else {
-        controller.enqueue(chunk);
-      }
-    },
-  });
-}
 
 export async function renderHTML(
   rscStream: ReadableStream<Uint8Array>,
@@ -89,9 +55,8 @@ export async function renderHTML(
   const ssrStyles = getSSRStyles();
   if (ssrStyles) {
     responseStream = responseStream.pipeThrough(
-      injectZeroCSSStyles(ssrStyles, { nonce: options?.nonce })
+      injectSSRPayload(ssrStyles, { nonce: options?.nonce })
     );
-    // clearSSRStyles() // Clean up after injection
   }
 
   if (!options?.debugNojs) {
