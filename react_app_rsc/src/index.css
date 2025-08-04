@@ -1,0 +1,15 @@
+.server-btn {
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+.bgc-green {
+  background-color: green;
+}
+
+.bgc-blue {
+  background-color: blue;
+}

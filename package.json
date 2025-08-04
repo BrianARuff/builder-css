@@ -1,0 +1,48 @@
+{
+  "name": "zero-css",
+  "private": false,
+  "version": "0.1.0",
+  "type": "module",
+  "files": [
+    "dist",
+    "index.d.ts"
+  ],
+  "main": "./dist/zero-css.cjs",
+  "module": "./dist/zero-css.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./dist/zero-css.js",
+      "require": "./dist/zero-css.cjs"
+    },
+    "./plugins/vite": {
+      "types": "./dist/lib/plugins/vite.d.ts",
+      "import": "./dist/plugins/vite.js",
+      "require": "./dist/plugins/vite.cjs"
+    },
+    "./plugins/webpack": {
+      "types": "./dist/lib/plugins/webpack.d.ts",
+      "import": "./dist/plugins/webpack.js",
+      "require": "./dist/plugins/webpack.cjs"
+    }
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "test-app": "vite --mode test"
+  },
+  "devDependencies": {
+    "@types/node": "^24.1.0",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "typescript": "~5.8.3",
+    "vite": "^7.0.0"
+  },
+  "dependencies": {
+    "csstype": "^3.1.3"
+  }
+}
